@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31919.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gestor_API", "Gestor_API.csproj", "{636537DA-9276-46A3-9C67-CCB00F155094}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{636537DA-9276-46A3-9C67-CCB00F155094}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{636537DA-9276-46A3-9C67-CCB00F155094}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{636537DA-9276-46A3-9C67-CCB00F155094}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{636537DA-9276-46A3-9C67-CCB00F155094}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EDF9A002-C276-4755-9CA8-8C5A7EC3FC26}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "636537da-9276-46a3-9c67-ccb00f155094": {
+      "ProjectGuid": "636537da-9276-46a3-9c67-ccb00f155094",
+      "DisplayName": "Gestor_API",
+      "ColorIndex": 0
+    },
+    "17a8c07e-adbb-4511-b99b-a11262447fd9": {
+      "ProjectGuid": "17a8c07e-adbb-4511-b99b-a11262447fd9",
+      "DisplayName": "Domain",
+      "ColorIndex": 1
+    },
+    "e651035e-2001-4c80-8955-bfd27af93b74": {
+      "ProjectGuid": "e651035e-2001-4c80-8955-bfd27af93b74",
+      "DisplayName": "Repository",
+      "ColorIndex": 2
+    }
+  },
+  "NextColorIndex": 3
+}
