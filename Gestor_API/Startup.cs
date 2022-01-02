@@ -1,6 +1,3 @@
-
-
-
 using Gestor_API.Context;
 using Gestor_API.Contracts;
 using Gestor_API.Repository;
