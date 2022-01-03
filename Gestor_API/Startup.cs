@@ -1,6 +1,3 @@
-
-
-
 using Gestor_API.Context;
 using Gestor_API.Contracts;
 using Gestor_API.Repository;
@@ -26,6 +23,7 @@ namespace Gestor_API
         {
             services.AddSingleton<DapperContext>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped< ICategoriaRepository, CategoriaRepository> ();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
