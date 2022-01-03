@@ -74,6 +74,7 @@ namespace Gestor_API.Controllers
 		{
 			try
 			{
+
                 if (usuario.ds_nome == null )
                 {
 					return BadRequest(new { message = "Usuário ou senha inválidos" });
