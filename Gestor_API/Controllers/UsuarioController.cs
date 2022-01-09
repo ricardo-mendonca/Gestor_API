@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
+
 namespace Gestor_API.Controllers
 {
     [Route("v1/Usuario")]
@@ -39,6 +40,7 @@ namespace Gestor_API.Controllers
 		{
 			try
 			{
+
 				var usuario = await _usuarioRepo.GetUsuarioId(Id);
 				if (usuario == null)
 					return NotFound();
@@ -74,7 +76,6 @@ namespace Gestor_API.Controllers
 		{
 			try
 			{
-
                 if (usuario.ds_nome == null )
                 {
 					return BadRequest(new { message = "Usuário ou senha inválidos" });
