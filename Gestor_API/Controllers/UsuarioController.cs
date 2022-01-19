@@ -24,28 +24,24 @@ namespace Gestor_API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Getusuario()
         {
-            try
-            {
-                var usuarios = await _usuarioRepo.Getusuarios();
-                if (usuarios == null) return BadRequest(new { message = "Nehum usuário localizado." });
-                return Ok(usuarios);
-            }
-            catch (Exception ex)
-            {
-                //log error
-                return StatusCode(500, ex.Message);
-            }
+
+            var usuarios = await _usuarioRepo.Getusuarios();
+            if (usuarios == null) return BadRequest(new { message = "Nehum usuário localizado." });
+
+            return Ok(usuarios);
+
         }
 
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetUsuarioId(int Id)
         {
             var ret = "";
-            if (Id == 0) ret = "Digite um Id valido" ;
+            if (Id == 0) ret = "Digite um Id valido";
             if (ret != null) return BadRequest(new { message = ret });
 
             var usuario = await _usuarioRepo.GetUsuarioId(Id);
             if (usuario == null) return BadRequest(new { message = "Nenhum usuario Localizado" });
+
             return Ok(usuario);
         }
 
@@ -56,10 +52,11 @@ namespace Gestor_API.Controllers
         {
             var ret = "";
             if (String.IsNullOrWhiteSpace(nome)) ret = "Favor informar um nome";
-            if (!String.IsNullOrWhiteSpace(ret) ) return BadRequest(new { message = ret });
-            
+            if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
+
             var usuarios = await _usuarioRepo.GetUsuarioNome(nome);
             if (usuarios == null) return BadRequest(new { message = "Nehum usuário localizado." });
+
             return Ok(usuarios);
         }
 
