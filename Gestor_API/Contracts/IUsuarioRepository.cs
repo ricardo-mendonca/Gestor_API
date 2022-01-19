@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Gestor_API.Contracts
 {
-    public interface IUsuarioRepository
+    public interface IUsuarioRepository 
     {
 		public Task<IEnumerable<Usuario>> Getusuarios();
 		public Task<Usuario> GetUsuarioId(int Id);

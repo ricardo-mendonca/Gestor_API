@@ -20,7 +20,7 @@ namespace Gestor_API.Repository
 
         public async Task<IEnumerable<Usuario>> Getusuarios()
         {
-            var query = "SELECT Id,ds_nome,ds_email,ds_senha,ds_telefone,dt_nascimento,Status FROM TB_USUARIO";
+            var query = "SELECT Id,ds_nome,ds_email,ds_senha,ds_telefone,dt_nascimento,fl_status FROM TB_USUARIO";
             using (var connection = _context.CreateConnection())
             {
                 var usuario = await connection.QueryAsync<Usuario>(query);
@@ -30,7 +30,8 @@ namespace Gestor_API.Repository
 
         public async Task<Usuario> GetUsuarioId(int id)
         {
-            var query = "SELECT Id,ds_nome,ds_email,ds_senha,ds_telefone, Convert(varchar(10),dt_nascimento,103) as dt_nascimento,Status FROM TB_USUARIO where Id = @id";
+
+            var query = "SELECT Id,ds_nome,ds_email,ds_senha,ds_telefone, Convert(varchar(10),dt_nascimento,103) as dt_nascimento,fl_status FROM TB_USUARIO where Id = @id";
             using (var connection = _context.CreateConnection())
             {
                 var usuario = await connection.QuerySingleOrDefaultAsync<Usuario>(query, new { id });
@@ -41,7 +42,7 @@ namespace Gestor_API.Repository
         public async Task<IEnumerable<Usuario>> GetUsuarioNome(string nome)
         {
             string dsnome = nome;
-            var query = "SELECT Id,ds_nome,ds_email,ds_senha,ds_telefone,Convert(varchar(10),dt_nascimento,103) as dt_nascimento,Status FROM TB_USUARIO where ds_nome like '%" + dsnome + "%'";
+            var query = "SELECT Id,ds_nome,ds_email,ds_senha,ds_telefone,Convert(varchar(10),dt_nascimento,103) as dt_nascimento,fl_status FROM TB_USUARIO where ds_nome like '%" + dsnome + "%'";
             using (var connection = _context.CreateConnection())
             {
                 var usuario = await connection.QueryAsync<Usuario>(query);

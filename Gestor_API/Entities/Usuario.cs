@@ -14,7 +14,7 @@ namespace Gestor_API.Entities
         public string dt_nascimento { get; set; }
         public char fl_status { get; set; }
         public string cd_rg { get; set; }
-        public double   cd_cpf { get; set; }
+        public double cd_cpf { get; set; }
         public string cd_cep { get; set; }
         public string ds_endereco { get; set; }
         public string ds_complemento { get; set; }
