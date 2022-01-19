@@ -1,5 +1,4 @@
 ﻿using Gestor_API.Contracts;
-using Gestor_API.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,59 +14,51 @@ namespace Gestor_API.Controllers
 
         public CategoriaController(ICategoriaRepository categoriaRepo)
         {
-			_categoriaRepo = categoriaRepo;
+            _categoriaRepo = categoriaRepo;
         }
 
 
-		[HttpGet]
-		[AllowAnonymous]
-		public async Task<IActionResult> GetCategoria()
-		{
-			try
-			{
-				var categoria = await _categoriaRepo.GetCategoria();
-				return Ok(categoria);
-			}
-			catch (Exception ex)
-			{
-				//log error
-				return StatusCode(500, ex.Message);
-			}
-		}
+        [HttpGet("/GetCategoria/")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetCategoria()
+        {
 
-		[HttpGet("/{nome}")]
-		[AllowAnonymous]
-		public async Task<IActionResult> GetCategoriaNome(string nome)
-		{
-			try
-			{
-				var categoria = await _categoriaRepo.GetCategoriaNome(nome);
-				return Ok(categoria);
-			}
-			catch (Exception ex)
-			{
-				//log error
-				return StatusCode(500, ex.Message);
-			}
-		}
+            var categoria = await _categoriaRepo.GetCategoria();
+            if (categoria == null) return BadRequest(new { message = "Nehum categoria localizada." });
 
-		[HttpGet("{Id}")]
-		public async Task<IActionResult> GetCategoriaId(int Id)
-		{
-			try
-			{
-				var categoria = await _categoriaRepo.GetCategoriaId(Id);
-				if (categoria == null)
-					return BadRequest(new { message = "Id inválidos" });
+            return Ok(categoria);
 
-				return Ok(categoria);
-			}
-			catch (Exception ex)
-			{
-				//log error
-				return StatusCode(500, ex.Message);
-			}
-		}
+        }
 
-	}
+        [HttpGet("/GetCategoriaNome/{nome}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetCategoriaNome(string nome)
+        {
+
+            var ret = "";
+            if (String.IsNullOrWhiteSpace(nome)) ret += "Favor informar uma categoria";
+            if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
+
+            var categoria = await _categoriaRepo.GetCategoriaNome(nome);
+            if (categoria == null) return BadRequest(new { message = "Nehuma categoria localizada." });
+
+            return Ok(categoria);
+
+        }
+
+        [HttpGet("/GetCategoriaId/{Id}")]
+        public async Task<IActionResult> GetCategoriaId(int Id)
+        {
+            var ret = "";
+            if (Id == 0) ret += "Digite um Id valido";
+            if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
+
+            var categoria = await _categoriaRepo.GetCategoriaId(Id);
+            if (categoria == null) return BadRequest(new { message = "Id inválidos" });
+
+            return Ok(categoria);
+
+        }
+
+    }
 }
