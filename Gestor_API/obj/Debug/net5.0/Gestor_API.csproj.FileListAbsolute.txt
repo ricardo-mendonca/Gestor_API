@@ -49,3 +49,4 @@ C:\dev\Gestor_API\obj\Debug\net5.0\Gestor_API.dll
 C:\dev\Gestor_API\obj\Debug\net5.0\ref\Gestor_API.dll
 C:\dev\Gestor_API\obj\Debug\net5.0\Gestor_API.pdb
 C:\dev\Gestor_API\obj\Debug\net5.0\Gestor_API.genruntimeconfig.cache
+C:\dev\Gestor_API\obj\Debug\net5.0\Gestor_API.csproj.AssemblyReference.cache
