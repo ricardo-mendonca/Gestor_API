@@ -59,10 +59,7 @@ namespace Gestor_API.Repository
             }
         }
 
-        public async Task DeleteDespesa(int id_usuario, int Id)
-        {
-            throw new System.NotImplementedException();
-        }
+       
 
         public async Task<IEnumerable<Despesa>> GetDespesas(int id_usuario, int cd_mes, int cd_ano)
         {
@@ -77,7 +74,12 @@ namespace Gestor_API.Repository
 
         public async Task<Despesa> GetDespesasId(int id_usuario, int Id)
         {
-            throw new System.NotImplementedException();
+            //var query = @"SELECT * FROM TB_DESPESA where id_usuario = @id_usuario and cd_mes = @cd_mes and cd_ano = @cd_ano";
+            //using (var connection = _context.CreateConnection())
+            //{
+            //    var despesa = await connection.QueryAsync<Despesa>(query);
+            //    return despesa.ToList();
+            //}
         }
 
         public async Task<IEnumerable<Despesa>> GetUsuarioNome(int id_usuario, int cd_tipo_despesa)
@@ -85,7 +87,12 @@ namespace Gestor_API.Repository
             throw new System.NotImplementedException();
         }
 
-        public async Task UpdateDespesa(Despesa despesa)
+        public async Task<Despesa> DeleteDespesa(int id_usuario, int Id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public async Task<Despesa> UpdateDespesa(Despesa despesa)
         {
             throw new System.NotImplementedException();
         }

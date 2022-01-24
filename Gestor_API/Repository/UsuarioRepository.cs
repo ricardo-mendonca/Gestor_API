@@ -18,6 +18,19 @@ namespace Gestor_API.Repository
             _context = context;
         }
 
+
+        public async Task<Usuario> login(string ds_email, string ds_senha)
+        {
+            var query = "SELECT * FROM TB_USUARIO where ds_email = '" + ds_email + "' and ds_senha = '" + ds_senha + "'";
+            using (var connection = _context.CreateConnection())
+            {
+                var usuario = await connection.QuerySingleOrDefaultAsync<Usuario>(query);
+                return usuario;
+            }
+        }
+
+
+
         public async Task<IEnumerable<Usuario>> Getusuarios()
         {
             var query = "SELECT Id,ds_nome,ds_email,ds_senha,ds_telefone,dt_nascimento,fl_status FROM TB_USUARIO";
@@ -106,5 +119,7 @@ namespace Gestor_API.Repository
                 return createdUsuario;
             }
         }
+
+     
     }
 }

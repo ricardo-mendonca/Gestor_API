@@ -6,6 +6,8 @@ namespace Gestor_API.Contracts
 {
     public interface IUsuarioRepository 
     {
+		public Task<Usuario> login(string ds_email, string ds_senha);
+
 		public Task<IEnumerable<Usuario>> Getusuarios();
 		public Task<Usuario> GetUsuarioId(int Id);
 

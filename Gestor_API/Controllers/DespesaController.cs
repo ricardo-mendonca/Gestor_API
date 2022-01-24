@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Gestor_API.Controllers
 {
-    //[Route("v1/")]
     [ApiController]
-    public class DespesaController : Controller
+    [Route("v1")]
+    public class DespesaController : ControllerBase
     {
         private readonly IDespesaRepository _despesaRepo;
 
@@ -18,7 +18,10 @@ namespace Gestor_API.Controllers
 
         }
 
-        [HttpPost("v1/CreateDespesa")]
+
+
+        [HttpPost("CreateDespesa")]
+        [Authorize]
         public async Task<IActionResult> CreateDespesa(Despesa despesa)
         {
 
@@ -29,7 +32,35 @@ namespace Gestor_API.Controllers
 
         }
 
-        [HttpGet("v1/GetDespesaMes")]
+        //public Task UpdateDespesa(Despesa despesa);
+        [HttpPost("UpdateDespesa")]
+        [Authorize]
+        public async Task<IActionResult> UpdateDespesa(Despesa despesa)
+        {
+
+            var desp = await _despesaRepo.UpdateDespesa(despesa);
+            if (desp == null) return BadRequest(new { message = "Nehum usuário localizado." });
+
+            return Ok(desp);
+
+        }
+
+        //public Task DeleteDespesa(int id_usuario, int Id);
+        [HttpPost("DeleteDespesa")]
+        [Authorize]
+        public async Task<IActionResult> DeleteDespesa(int id_usuario, int Id)
+        {
+
+            var desp = await _despesaRepo.DeleteDespesa(id_usuario, Id);
+            if (desp == null) return BadRequest(new { message = "Nehum usuário localizado." });
+
+            return Ok(desp);
+
+        }
+
+
+        [HttpGet("GetDespesaMes")]
+        [Authorize]
         public async Task<IActionResult> GetDespesas(int id_usuario, int cd_mes, int cd_ano)
         {
             var ret = "";
@@ -44,7 +75,8 @@ namespace Gestor_API.Controllers
             return Ok(desp);
         }
 
-        [HttpGet("v1/GetDespesasId")]
+        [HttpGet("GetDespesasId")]
+        [Authorize]
         public async Task<IActionResult> GetDespesasId(int id_usuario, int Id)
         {
             var ret = "";
@@ -58,7 +90,8 @@ namespace Gestor_API.Controllers
             return Ok(desp);
         }
 
-        [HttpGet("v1/GetUsuarioNome")]
+        [HttpGet("GetUsuarioNome")]
+        [Authorize]
         public async Task<IActionResult> GetUsuarioNome(int id_usuario, int cd_tipo_despesa)
         {
             var ret = "";
@@ -72,10 +105,6 @@ namespace Gestor_API.Controllers
             return Ok(desp);
         }
 
-        
-        //public Task UpdateDespesa(Despesa despesa);
-        
-        //public Task DeleteDespesa(int id_usuario, int Id);
 
     }
 }
