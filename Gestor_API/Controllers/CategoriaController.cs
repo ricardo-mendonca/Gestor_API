@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Gestor_API.Controllers
 {
-    [Route("v1/Categoria")]
     [ApiController]
-    public class CategoriaController : Controller
+    [Route("v1")]
+    public class CategoriaController : ControllerBase
     {
         private readonly ICategoriaRepository _categoriaRepo;
 
@@ -18,23 +18,21 @@ namespace Gestor_API.Controllers
         }
 
 
-        [HttpGet("/GetCategoria/")]
+
+        [HttpGet("GetCategoria")]
         [AllowAnonymous]
         public async Task<IActionResult> GetCategoria()
         {
-
             var categoria = await _categoriaRepo.GetCategoria();
             if (categoria == null) return BadRequest(new { message = "Nehum categoria localizada." });
 
             return Ok(categoria);
-
         }
 
-        [HttpGet("/GetCategoriaNome/{nome}")]
+        [HttpGet("GetCategoriaNome/{nome}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetCategoriaNome(string nome)
         {
-
             var ret = "";
             if (String.IsNullOrWhiteSpace(nome)) ret += "Favor informar uma categoria";
             if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
@@ -43,10 +41,10 @@ namespace Gestor_API.Controllers
             if (categoria == null) return BadRequest(new { message = "Nehuma categoria localizada." });
 
             return Ok(categoria);
-
         }
 
-        [HttpGet("/GetCategoriaId/{Id}")]
+        [HttpGet("GetCategoriaId/{Id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCategoriaId(int Id)
         {
             var ret = "";
@@ -57,7 +55,6 @@ namespace Gestor_API.Controllers
             if (categoria == null) return BadRequest(new { message = "Id inválidos" });
 
             return Ok(categoria);
-
         }
 
     }

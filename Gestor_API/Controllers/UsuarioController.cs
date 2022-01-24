@@ -1,5 +1,6 @@
 ﻿using Gestor_API.Contracts;
 using Gestor_API.Entities;
+using Gestor_API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Gestor_API.Controllers
 {
-    [Route("v1/Usuario")]
     [ApiController]
-    public class UsuarioController : Controller
+    [Route("v1")]
+    public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioRepository _usuarioRepo;
 
@@ -20,8 +21,47 @@ namespace Gestor_API.Controllers
 
         }
 
-        [HttpGet]
-        [AllowAnonymous]
+
+
+        [HttpPost]
+        [Route("login")]
+        public async Task<ActionResult<dynamic>> AuthenticateAsync([FromBody] Usuario usuario)
+        {
+            //recupera usuario
+            var user = await _usuarioRepo.login(usuario.ds_email, usuario.ds_senha);
+ 
+            // verifica se o usuario existe
+            if (user == null)
+                return NotFound(new { message = "Usuario ou senha invalido" });
+
+            //gera o token
+            var token = TokenService.GenerateToken(user);
+
+            //Ocultar senha
+            user.ds_senha = "";
+
+            return new
+            {
+                user = user,
+                token = token
+            };
+        }
+
+        [HttpPost("cadastrar")]
+        [Authorize]
+        public async Task<IActionResult> CreateUsuario(Usuario usuario)
+        {
+            var ret = "";
+            if (usuario.cd_cpf == 0) ret += "CPF Invalido; ";
+            if (String.IsNullOrWhiteSpace(usuario.ds_nome)) ret += " Favor informar um nome;";
+            if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
+
+            var user = await _usuarioRepo.CreateUsuario(usuario);
+            return Ok(user);
+        }
+
+        [HttpGet("pesquisarTodos")]
+        [Authorize]
         public async Task<IActionResult> Getusuario()
         {
 
@@ -32,8 +72,8 @@ namespace Gestor_API.Controllers
 
         }
 
-        [HttpGet("/pesquisar/{nome}")]
-        [AllowAnonymous]
+        [HttpGet("pesquisarPorNome")]
+        [Authorize]
         public async Task<IActionResult> GetUsuarioNome(string nome)
         {
             var ret = "";
@@ -46,12 +86,13 @@ namespace Gestor_API.Controllers
             return Ok(usuarios);
         }
 
-        [HttpGet("{Id}")]
+        [HttpGet("pesquisarPorId")]
+        [Authorize]
         public async Task<IActionResult> GetUsuarioId(int Id)
         {
             var ret = "";
             if (Id == 0) ret += "Digite um Id valido";
-            if (ret != null) return BadRequest(new { message = ret });
+            if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
 
             var usuario = await _usuarioRepo.GetUsuarioId(Id);
             if (usuario == null) return BadRequest(new { message = "Nenhum usuario Localizado" });
@@ -59,19 +100,6 @@ namespace Gestor_API.Controllers
             return Ok(usuario);
         }
 
-
-        
-
-        [HttpPost("/cadastrar")]
-        public async Task<IActionResult> CreateUsuario(Usuario usuario)
-        {
-            var ret = "";
-            if (usuario.cd_cpf == 0) ret += "CPF Invalido; ";
-            if (String.IsNullOrWhiteSpace(usuario.ds_nome)) ret += " Favor informar um nome;";
-            if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
-
-            var user = await _usuarioRepo.CreateUsuario(usuario);
-            return Ok(user);
-        }
+       
     }
 }
