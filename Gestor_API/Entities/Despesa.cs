@@ -16,6 +16,7 @@ namespace Gestor_API.Entities.Contas
         public DateTime dt_pagamento { get; set; }
         public DateTime dt_vencimento { get; set; }
         public char fl_pago { get; set; }
+        public string ds_descricao { get; set; }
         public EnumTipoDespesa cd_tipoDespesa { get; set; }
 
     }

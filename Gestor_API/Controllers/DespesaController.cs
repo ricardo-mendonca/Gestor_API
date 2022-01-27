@@ -2,6 +2,7 @@
 using Gestor_API.Entities.Contas;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace Gestor_API.Controllers
@@ -39,7 +40,7 @@ namespace Gestor_API.Controllers
         {
 
             var desp = await _despesaRepo.UpdateDespesa(despesa);
-            if (desp == null) return BadRequest(new { message = "Nehum usuário localizado." });
+            if (desp == null) return BadRequest(new { message = "ops!! não foi ralizado a alteração." });
 
             return Ok(desp);
 
@@ -52,7 +53,7 @@ namespace Gestor_API.Controllers
         {
 
             var desp = await _despesaRepo.DeleteDespesa(id_usuario, Id);
-            if (desp == null) return BadRequest(new { message = "Nehum usuário localizado." });
+            if (desp == null) return BadRequest(new { message = "Ops!! não foi localizado este registro." });
 
             return Ok(desp);
 
@@ -67,7 +68,7 @@ namespace Gestor_API.Controllers
             if (id_usuario == 0) ret += "usuario inválido";
             if (cd_mes == 0) ret += "Digite um mês valido";
             if (cd_ano == 0) ret += "Digite um ano valido";
-            if (ret != null) return BadRequest(new { message = ret });
+            if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
 
             var desp = await _despesaRepo.GetDespesas(id_usuario, cd_mes, cd_ano);
             if (desp == null) return BadRequest(new { message = "Nehum usuário localizado." });
@@ -82,24 +83,24 @@ namespace Gestor_API.Controllers
             var ret = "";
             if (id_usuario == 0) ret += "usuario inválido";
             if (Id == 0) ret += "Digite um Id válido";
-            if (ret != null) return BadRequest(new { message = ret });
+            if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
 
             var desp = await _despesaRepo.GetDespesasId(id_usuario, Id);
-            if (desp == null) return BadRequest(new { message = "Nehum usuário localizado." });
+            if (desp == null) return BadRequest(new { message = "Nehuma despesa localizada." });
 
             return Ok(desp);
         }
 
-        [HttpGet("GetUsuarioNome")]
+        [HttpGet("GetUsuarioTipoDespesa")]
         [Authorize]
-        public async Task<IActionResult> GetUsuarioNome(int id_usuario, int cd_tipo_despesa)
+        public async Task<IActionResult> GetUsuarioNome(int id_usuario, int cd_tipoDespesa)
         {
             var ret = "";
             if (id_usuario == 0) ret += "usuario inválido";
-            if (cd_tipo_despesa == 0) ret += "Informe um tipo de despesa";
-            if (ret != null) return BadRequest(new { message = ret });
+            if (cd_tipoDespesa == 0) ret += "Informe um tipo de despesa";
+            if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
 
-            var desp = await _despesaRepo.GetUsuarioNome(id_usuario, cd_tipo_despesa);
+            var desp = await _despesaRepo.GetUsuarioNome(id_usuario, cd_tipoDespesa);
             if (desp == null) return BadRequest(new { message = "Nehum usuário localizado." });
 
             return Ok(desp);
