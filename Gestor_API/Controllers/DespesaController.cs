@@ -51,6 +51,10 @@ namespace Gestor_API.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteDespesa(int id_usuario, int Id)
         {
+            var ret = "";
+            if (id_usuario == 0) ret += "usuario inválido";
+            if (Id == 0) ret += "Operação inválida";
+            if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
 
             var desp = await _despesaRepo.DeleteDespesa(id_usuario, Id);
             if (desp == null) return BadRequest(new { message = "Ops!! não foi localizado este registro." });
