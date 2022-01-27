@@ -27,6 +27,7 @@ namespace Gestor_API
             services.AddSingleton<DapperContext>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped< ICategoriaRepository, CategoriaRepository> ();
+            services.AddScoped<IDespesaRepository, DespesaRepository>();
             services.AddControllers();
 
             services.AddControllersWithViews();
