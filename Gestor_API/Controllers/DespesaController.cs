@@ -25,6 +25,11 @@ namespace Gestor_API.Controllers
         [Authorize]
         public async Task<IActionResult> CreateDespesa(Despesa despesa)
         {
+            var ret = "";
+            if (despesa.id_usuario == 0) ret += "Usuario não informado ";
+            if (despesa.id_categoria == 0) ret += "Categoria não informada ";
+            if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
+
 
             var desp = await _despesaRepo.CreateDespesa(despesa);
             if (desp == null) return BadRequest(new { message = "Nehum usuário localizado." });
