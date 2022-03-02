@@ -18,8 +18,10 @@ namespace Gestor_API.Services
             {
                 Subject = new ClaimsIdentity(new[] 
                 {
-                    new Claim(ClaimTypes.Name, usuario.ds_nome),
-                    new Claim(ClaimTypes.Role, usuario.Id.ToString())
+                    new Claim(ClaimTypes.Name, usuario.ds_nome+";"+usuario.Id),
+                    new Claim(ClaimTypes.Role, usuario.Id.ToString()),
+                    new Claim(ClaimTypes.Hash, usuario.Id.ToString())
+
                 }),
                 Expires = System.DateTime.UtcNow.AddHours(8), SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),SecurityAlgorithms.HmacSha256Signature)
             };
@@ -27,8 +29,6 @@ namespace Gestor_API.Services
             var Token = tokenhandler.CreateToken(tokenDescription);
 
             return tokenhandler.WriteToken(Token);
-
-
         }
     }
 }

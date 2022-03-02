@@ -9,12 +9,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Text;
 
 namespace Gestor_API
 {
     public class Startup
     {
+
+        private readonly string _MyCors = "MyCors";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -55,6 +58,16 @@ namespace Gestor_API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gestor_API", Version = "v1" });
             });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: _MyCors, builder =>
+                {
+                    //builder.WithOrigins("http://localhost");
+                    builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+                    .AllowAnyHeader().AllowAnyMethod();
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -69,6 +82,8 @@ namespace Gestor_API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(_MyCors);
 
             app.UseAuthentication();
             app.UseAuthorization();

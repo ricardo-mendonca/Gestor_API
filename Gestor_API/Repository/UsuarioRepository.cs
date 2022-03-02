@@ -29,8 +29,6 @@ namespace Gestor_API.Repository
             }
         }
 
-
-
         public async Task<IEnumerable<Usuario>> Getusuarios()
         {
             var query = "SELECT Id,ds_nome,ds_email,ds_senha,ds_telefone,dt_nascimento,fl_status FROM TB_USUARIO";
@@ -44,10 +42,12 @@ namespace Gestor_API.Repository
         public async Task<Usuario> GetUsuarioId(int id)
         {
 
-            var query = "SELECT Id,ds_nome,ds_email,ds_senha,ds_telefone, Convert(varchar(10),dt_nascimento,103) as dt_nascimento,fl_status FROM TB_USUARIO where Id = @id";
+            var query = "select ds_nome,ds_email,ds_senha,ds_telefone,  dt_nascimento,fl_status,cd_rg,cd_cpf,cd_cep,ds_endereco,ds_complemento,nr_endereco,ds_bairro,ds_cidade,cd_uf" +
+                " FROM TB_USUARIO where Id = "+ id ;
+
             using (var connection = _context.CreateConnection())
             {
-                var usuario = await connection.QuerySingleOrDefaultAsync<Usuario>(query, new { id });
+                var usuario = await connection.QuerySingleOrDefaultAsync<Usuario>(query);
                 return usuario;
             }
         }
@@ -65,61 +65,104 @@ namespace Gestor_API.Repository
 
         public async Task<Usuario> CreateUsuario(Usuario usuario)
         {
-            var query = "INSERT INTO TB_USUARIO (ds_nome,ds_email, ds_senha,ds_telefone,dt_nascimento,fl_status,cd_rg,cd_cpf,cd_cep,ds_endereco,ds_complemento,nr_endereco,ds_bairro,ds_cidade,cd_uf,dt_inclusao) " +
-                "VALUES (@ds_nome,@ds_email, @ds_senha,@ds_telefone,@dt_nascimento,@fl_status,@cd_rg,@cd_cpf,@cd_cep,@ds_endereco,@ds_complemento,@nr_endereco,@ds_bairro,@ds_cidade,@cd_uf,getdate())" +
+            var query = @"INSERT INTO TB_USUARIO (ds_nome,ds_email, ds_senha,ds_telefone,dt_nascimento,fl_status,cd_rg,cd_cpf,cd_cep,ds_endereco,ds_complemento,nr_endereco,ds_bairro,ds_cidade,cd_uf,dt_inclusao) 
+                VALUES ('" + usuario.ds_nome + "','" + usuario.ds_email + "','" + usuario.ds_senha + "','" + usuario.ds_telefone + "','" + usuario.dt_nascimento + "','1','" + usuario.cd_rg + "','" + usuario.cd_cpf + "','" + usuario.cd_cep +
+                "','" + usuario.ds_endereco + "','" + usuario.ds_complemento + "','" + usuario.nr_endereco + "','" + usuario.ds_bairro + "','" + usuario.ds_cidade + "','" + usuario.cd_uf + "',getdate()) " +
                 "SELECT CAST(SCOPE_IDENTITY() as int)";
 
-            var parameters = new DynamicParameters();
-            parameters.Add("ds_nome", usuario.ds_nome, DbType.String);
-            parameters.Add("ds_email", usuario.ds_email, DbType.String);
-            parameters.Add("ds_senha", usuario.ds_senha, DbType.String);
-            parameters.Add("ds_telefone", usuario.ds_telefone, DbType.String);
-            parameters.Add("dt_nascimento", usuario.dt_nascimento);
-            parameters.Add("fl_status", usuario.fl_status);
-            parameters.Add("cd_rg", usuario.cd_rg);
-            parameters.Add("cd_cpf", usuario.cd_cpf);
-            parameters.Add("cd_cep", usuario.cd_cep);
-            parameters.Add("ds_endereco", usuario.ds_endereco);
-            parameters.Add("ds_complemento", usuario.ds_complemento);
-            parameters.Add("nr_endereco", usuario.nr_endereco);
-            parameters.Add("ds_bairro", usuario.ds_bairro);
-            parameters.Add("ds_cidade", usuario.ds_cidade);
-            parameters.Add("cd_uf", usuario.cd_uf);
-            parameters.Add("dt_inclusao", usuario.dt_inclusao);
+            using var connection2 = _context.CreateConnection();
+            var id = await connection2.QuerySingleAsync<int>(query);
 
 
+            var createdUsuario = new Usuario
+            {
+                Id = id,
+                ds_nome = usuario.ds_nome,
+                ds_email = usuario.ds_email,
+                ds_senha = usuario.ds_senha,
+                ds_telefone = usuario.ds_telefone,
+                dt_nascimento = usuario.dt_nascimento,
+                fl_status = usuario.fl_status,
+                cd_rg = usuario.cd_rg,
+                cd_cpf = usuario.cd_cpf,
+                cd_cep = usuario.cd_cep,
+                ds_endereco = usuario.ds_endereco,
+                ds_complemento = usuario.ds_complemento,
+                nr_endereco = usuario.nr_endereco,
+                ds_bairro = usuario.ds_bairro,
+                ds_cidade = usuario.ds_cidade,
+                cd_uf = usuario.cd_uf,
+                dt_inclusao = usuario.dt_inclusao
 
+            };
+
+            return createdUsuario;
+        }
+
+        public async Task<Usuario> updateUsuario(Usuario usuario)
+        {
+            var query = @"update TB_USUARIO set ds_nome='"+usuario.ds_nome+ "' ,ds_email= '" + usuario.ds_email + "', ds_telefone= '" + usuario.ds_telefone + "' ,dt_nascimento= '" + usuario.dt_nascimento +
+                "' ,cd_rg='" + usuario.cd_rg + "' , cd_cep='" + usuario.cd_cep + "' ,ds_endereco='" + usuario.ds_endereco + "' ,ds_complemento='" + usuario.ds_complemento +
+                "' ,nr_endereco='" + usuario.nr_endereco + "',ds_bairro='" + usuario.ds_bairro + "',ds_cidade='" + usuario.ds_cidade + "',cd_uf='" + usuario.cd_uf + "' where id = "+ usuario.Id + " SELECT CAST(SCOPE_IDENTITY() as int)";
 
             using (var connection = _context.CreateConnection())
             {
-                var id = await connection.QuerySingleAsync<int>(query, parameters);
-
-                var createdUsuario = new Usuario
-                {
-                    Id = id,
-                    ds_nome = usuario.ds_nome,
-                    ds_email = usuario.ds_email,
-                    ds_senha = usuario.ds_senha,
-                    ds_telefone = usuario.ds_telefone,
-                    dt_nascimento = usuario.dt_nascimento,
-                    fl_status = usuario.fl_status,
-                    cd_rg = usuario.cd_rg,
-                    cd_cpf = usuario.cd_cpf,
-                    cd_cep = usuario.cd_cep,
-                    ds_endereco = usuario.ds_endereco,
-                    ds_complemento = usuario.ds_complemento,
-                    nr_endereco = usuario.nr_endereco,
-                    ds_bairro = usuario.ds_bairro,
-                    ds_cidade = usuario.ds_cidade,
-                    cd_uf = usuario.cd_uf,
-                    dt_inclusao = usuario.dt_inclusao
-
-                };
-
-                return createdUsuario;
+                var user = await connection.QuerySingleOrDefaultAsync<Usuario>(query);
             }
+
+            var createdUsuario = new Usuario
+            {
+                Id = usuario.Id,
+                ds_nome = usuario.ds_nome,
+                ds_email = usuario.ds_email,
+                ds_senha = usuario.ds_senha,
+                ds_telefone = usuario.ds_telefone,
+                dt_nascimento = usuario.dt_nascimento,
+                fl_status = usuario.fl_status,
+                cd_rg = usuario.cd_rg,
+                cd_cpf = usuario.cd_cpf,
+                cd_cep = usuario.cd_cep,
+                ds_endereco = usuario.ds_endereco,
+                ds_complemento = usuario.ds_complemento,
+                nr_endereco = usuario.nr_endereco,
+                ds_bairro = usuario.ds_bairro,
+                ds_cidade = usuario.ds_cidade,
+                cd_uf = usuario.cd_uf,
+                dt_inclusao = usuario.dt_inclusao
+
+            };
+
+            return createdUsuario;
         }
 
-     
+        public async Task<Usuario> ResetPassword(Usuario usuario)
+        {
+            var query = @"select COUNT(1) from TB_USUARIO where ds_email = '" + usuario.ds_email + "' "; 
+            
+            using var connection2 = _context.CreateConnection();
+            int count = await connection2.QuerySingleAsync<int>(query);
+            
+            if(count > 0)
+            {
+                query = null;
+                query = "update tb_usuario set ds_senha = '654321' where  ds_email = '" + usuario.ds_email + "' " + "SELECT CAST(SCOPE_IDENTITY() as int)";
+                using (var connection = _context.CreateConnection())
+                {
+                    var user = await connection.QuerySingleAsync<Usuario>(query);
+                    return user;
+                }
+            }
+
+            var createdUsuario = new Usuario
+            {
+                ds_nome = "erro nenhum email encontrado."
+            };
+            return createdUsuario;
+        }
+
+        
     }
+
+
 }
+

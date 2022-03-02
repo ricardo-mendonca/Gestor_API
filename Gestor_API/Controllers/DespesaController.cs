@@ -16,7 +16,6 @@ namespace Gestor_API.Controllers
         public DespesaController(IDespesaRepository despesaRepo)
         {
             _despesaRepo = despesaRepo;
-
         }
 
 
@@ -25,6 +24,11 @@ namespace Gestor_API.Controllers
         [Authorize]
         public async Task<IActionResult> CreateDespesa(Despesa despesa)
         {
+            var ret = "";
+            if (despesa.id_usuario == 0) ret += "Usuario não informado ";
+            if (despesa.id_categoria == 0) ret += "Categoria não informada ";
+            if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
+
 
             var desp = await _despesaRepo.CreateDespesa(despesa);
             if (desp == null) return BadRequest(new { message = "Nehum usuário localizado." });
@@ -66,7 +70,7 @@ namespace Gestor_API.Controllers
 
         [HttpGet("GetDespesaMes")]
         [Authorize]
-        public async Task<IActionResult> GetDespesas(int id_usuario, int cd_mes, int cd_ano)
+        public async Task<IActionResult> GetDespesasMes(int id_usuario, int cd_mes, int cd_ano)
         {
             var ret = "";
             if (id_usuario == 0) ret += "usuario inválido";
@@ -74,7 +78,7 @@ namespace Gestor_API.Controllers
             if (cd_ano == 0) ret += "Digite um ano valido";
             if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
 
-            var desp = await _despesaRepo.GetDespesas(id_usuario, cd_mes, cd_ano);
+            var desp = await _despesaRepo.GetDespesasMes(id_usuario, cd_mes, cd_ano);
             if (desp == null) return BadRequest(new { message = "Nehum usuário localizado." });
 
             return Ok(desp);
@@ -94,6 +98,21 @@ namespace Gestor_API.Controllers
 
             return Ok(desp);
         }
+
+        [HttpGet("GetDespesas")]
+        [Authorize]
+        public async Task<IActionResult> GetDespesas()
+        {
+            var user = User.Identity.Name;
+            string[] usuario = user.Split(';');
+            int Id_usuario = Convert.ToInt32(usuario[1].ToString());          
+
+            var desp = await _despesaRepo.GetDespesas(Id_usuario);
+            if (desp == null) return BadRequest(new { message = "Nehuma despesa localizada." });
+
+            return Ok(desp);
+        }
+
 
         [HttpGet("GetUsuarioTipoDespesa")]
         [Authorize]

@@ -11,11 +11,11 @@ namespace Gestor_API.Contracts
 
 		public Task<Despesa> UpdateDespesa(Despesa despesa);
 		public Task<Despesa> DeleteDespesa(int id_usuario, int Id);
-		public Task<IEnumerable<Despesa>> GetDespesas(int id_usuario, int cd_mes, int cd_ano );
+		public Task<IEnumerable<Despesa>> GetDespesasMes(int id_usuario, int cd_mes, int cd_ano );
 		public Task<Despesa> GetDespesasId(int id_usuario,int Id);
 		public Task<IEnumerable<Despesa>> GetUsuarioNome(int id_usuario,int cd_tipo_despesa);
-		
-		
-		
+
+		public Task<IEnumerable<Despesa>> GetDespesas(int id_usuario);
+
 	}
 }
