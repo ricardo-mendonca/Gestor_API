@@ -18,9 +18,7 @@ namespace Gestor_API.Controllers
         public UsuarioController(IUsuarioRepository usuarioRepo)
         {
             _usuarioRepo = usuarioRepo;
-
         }
-
 
 
         [HttpPost]
@@ -47,9 +45,9 @@ namespace Gestor_API.Controllers
             };
         }
 
-        [HttpPost("cadastrar")]
-        [Authorize]
-        public async Task<IActionResult> CreateUsuario(Usuario usuario)
+        [HttpPost]
+        [Route("CreateUsuario")]
+        public async Task<ActionResult<dynamic>> CreateUsuario([FromBody] Usuario usuario)
         {
             var ret = "";
             if (usuario.cd_cpf == 0) ret += "CPF Invalido; ";
@@ -60,17 +58,62 @@ namespace Gestor_API.Controllers
             return Ok(user);
         }
 
-        [HttpGet("pesquisarTodos")]
-        [Authorize]
-        public async Task<IActionResult> Getusuario()
+        [HttpPost]
+        [Route("ResetPassword")]
+        public async Task<ActionResult<dynamic>> ResetPassword([FromBody] Usuario usuario)
         {
+            var ret = "";
+            if (String.IsNullOrWhiteSpace(usuario.ds_email)) ret += " Favor informar um E-mail valido. ";
+            if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
 
-            var usuarios = await _usuarioRepo.Getusuarios();
+            var user = await _usuarioRepo.ResetPassword(usuario);
+            if (user.ds_nome != null) return BadRequest(new { message = "Nenhum usuario Localizado" });
+
+
+            return Ok(new { message = "Sua nova senha é 654321" });
+        }
+
+
+        [HttpGet("getUsuario")]
+        [Authorize]
+        public async Task<IActionResult> getUsuario()
+        {
+            var user = User.Identity.Name;
+            string[] usuario = user.Split(';');
+            int Id_usuario = Convert.ToInt32(usuario[1].ToString());
+
+
+            var usuarios = await _usuarioRepo.GetUsuarioId(Id_usuario);
             if (usuarios == null) return BadRequest(new { message = "Nehum usuário localizado." });
 
             return Ok(usuarios);
 
         }
+
+        [HttpPut("updateUsuario")]
+        [Authorize]
+        public async Task<ActionResult<dynamic>> updateUsuario([FromBody] Usuario usuario)
+        {
+            var user = User.Identity.Name;
+            string[] v = user.Split(';');
+            int Id_usuario = Convert.ToInt32(v[1].ToString());
+            usuario.Id = Id_usuario;
+
+            var ret = "";
+            if (usuario.Id == 0) ret += "Id Invalido; ";
+            if (String.IsNullOrWhiteSpace(usuario.ds_nome)) ret += " Favor informar um nome;";
+            if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
+
+            var usuarios = await _usuarioRepo.updateUsuario(usuario);
+            if (usuarios == null) return BadRequest(new { message = "Nehum usuário localizado." });
+
+            return Ok(usuarios);
+
+        }
+
+
+
+
 
         [HttpGet("pesquisarPorNome")]
         [Authorize]

@@ -125,7 +125,7 @@ namespace Gestor_API.Repository
 
 
 
-        public async Task<IEnumerable<Despesa>> GetDespesas(int id_usuario, int cd_mes, int cd_ano)
+        public async Task<IEnumerable<Despesa>> GetDespesasMes(int id_usuario, int cd_mes, int cd_ano)
         {
 
             var query = @"SELECT * FROM TB_DESPESA where id_usuario = " + id_usuario + " and cd_mes = " + cd_mes + " and cd_ano = " + cd_ano;
@@ -217,6 +217,16 @@ namespace Gestor_API.Repository
                 return null;
             }
 
+        }
+
+        public async Task<IEnumerable<Despesa>> GetDespesas(int id_usuario)
+        {
+            var query = @"select Id, id_categoria, cd_qtd_parc,cd_qtd_tot_parc, vl_valor_parc, vl_valor_desconto, vl_valor_multa, cd_dia, cd_mes, cd_ano, fl_despesa_fixa,fl_pago,dt_vencimento,ds_descricao  from TB_DESPESA where id_usuario = " + id_usuario ;
+            using (var connection = _context.CreateConnection())
+            {
+                var despesa = await connection.QueryAsync<Despesa>(query);
+                return despesa.ToList();
+            }
         }
     }
 }

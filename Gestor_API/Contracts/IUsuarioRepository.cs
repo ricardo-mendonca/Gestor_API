@@ -15,12 +15,21 @@ namespace Gestor_API.Contracts
 
 		public Task<Usuario> CreateUsuario(Usuario usuario);
 
-		//public Task UpdateCompany(int id, UsuarioForUpdateDto company);
-		//public Task DeleteCompany(int id);
-		//public Task<Usuario> GetCompanyByEmployeeId(int id);
-		//public Task<Usuario> GetCompanyEmployeesMultipleResults(int id);
+        public Task<Usuario> updateUsuario(Usuario usuario);
+
+        
+        public Task<Usuario> ResetPassword(Usuario usuario);
+        
 
 
 
-	}
+
+        //public Task UpdateCompany(int id, UsuarioForUpdateDto company);
+        //public Task DeleteCompany(int id);
+        //public Task<Usuario> GetCompanyByEmployeeId(int id);
+        //public Task<Usuario> GetCompanyEmployeesMultipleResults(int id);
+
+
+
+    }
 }
