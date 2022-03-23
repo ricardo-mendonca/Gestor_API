@@ -24,6 +24,10 @@ namespace Gestor_API.Controllers
         [Authorize]
         public async Task<IActionResult> CreateDespesa(Despesa despesa)
         {
+            var user = User.Identity.Name;
+            string[] usuario = user.Split(';');
+            despesa.id_usuario = Convert.ToInt32(usuario[1].ToString());
+
             var ret = "";
             if (despesa.id_usuario == 0) ret += "Usuario não informado ";
             if (despesa.id_categoria == 0) ret += "Categoria não informada ";
@@ -42,6 +46,14 @@ namespace Gestor_API.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateDespesa(Despesa despesa)
         {
+            var user = User.Identity.Name;
+            string[] usuario = user.Split(';');
+            despesa.id_usuario = Convert.ToInt32(usuario[1].ToString());
+
+            var ret = "";
+            if (despesa.id_usuario == 0) ret += "Usuario não informado ";
+            if (despesa.id_categoria == 0) ret += "Categoria não informada ";
+            if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
 
             var desp = await _despesaRepo.UpdateDespesa(despesa);
             if (desp == null) return BadRequest(new { message = "ops!! não foi ralizado a alteração." });
@@ -84,30 +96,36 @@ namespace Gestor_API.Controllers
             return Ok(desp);
         }
 
-        [HttpGet("GetDespesasId")]
+        [HttpPost]
+        [Route("GetDespesasId")]
         [Authorize]
-        public async Task<IActionResult> GetDespesasId(int id_usuario, int Id)
+        public async Task<ActionResult<dynamic>> GetDespesasId([FromBody] Despesa despesa)
         {
+            var user = User.Identity.Name;
+            string[] usuario = user.Split(';');
+            despesa.id_usuario = Convert.ToInt32(usuario[1].ToString());
+
             var ret = "";
-            if (id_usuario == 0) ret += "usuario inválido";
-            if (Id == 0) ret += "Digite um Id válido";
+            if (despesa.id_usuario == 0) ret += "usuario inválido";
+            if (despesa.id == 0) ret += "Digite um Id válido";
             if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
 
-            var desp = await _despesaRepo.GetDespesasId(id_usuario, Id);
+            var desp = await _despesaRepo.GetDespesasId(despesa);
             if (desp == null) return BadRequest(new { message = "Nehuma despesa localizada." });
 
             return Ok(desp);
         }
 
-        [HttpGet("GetDespesas")]
+
+        [HttpPost("GetDespesas")]
         [Authorize]
-        public async Task<IActionResult> GetDespesas()
+        public async Task<IActionResult> GetDespesas([FromBody] Despesa despesa)
         {
             var user = User.Identity.Name;
             string[] usuario = user.Split(';');
             int Id_usuario = Convert.ToInt32(usuario[1].ToString());          
 
-            var desp = await _despesaRepo.GetDespesas(Id_usuario);
+            var desp = await _despesaRepo.GetDespesas(Id_usuario, despesa.cd_mes, despesa.cd_ano);
             if (desp == null) return BadRequest(new { message = "Nehuma despesa localizada." });
 
             return Ok(desp);
