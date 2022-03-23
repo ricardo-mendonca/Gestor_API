@@ -112,9 +112,6 @@ namespace Gestor_API.Controllers
         }
 
 
-
-
-
         [HttpGet("pesquisarPorNome")]
         [Authorize]
         public async Task<IActionResult> GetUsuarioNome(string nome)
