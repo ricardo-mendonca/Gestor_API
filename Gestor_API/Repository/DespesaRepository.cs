@@ -22,7 +22,24 @@ namespace Gestor_API.Repository
 
         public async Task<Despesa> GetDespesasId(Despesa despesa)
         {
-            var query = @"SELECT * FROM TB_DESPESA where id_usuario =  " + despesa.id_usuario + " and id = " + despesa.id;
+            var query = @"SELECT 
+                            id
+                            ,id_usuario
+                            ,id_categoria
+                            ,cd_qtd_parc
+                            ,cd_qtd_tot_parc
+                            ,vl_valor_parc
+                            ,vl_valor_multa
+                            ,vl_valor_desconto
+                            ,cd_dia
+                            ,cd_mes
+                            ,cd_ano
+                            ,fl_despesa_fixa
+                            ,fl_pago
+,dt_vencimento
+,dt_pagamento
+                            ,ds_descricao,
+                            Id_parcela FROM TB_DESPESA where id_usuario =  " + despesa.id_usuario + " and id = " + despesa.id;
 
             using var connection = _context.CreateConnection();
             despesa = await connection.QuerySingleOrDefaultAsync<Despesa>(query);
