@@ -53,11 +53,14 @@ namespace Gestor_API.Repository
 
             DateTime dat = Convert.ToDateTime(despesa.dt_vencimento);
             var dt_vencimento = dat.ToString("yyyy-MM-dd");
+          
             var dt_pagamento = "2100-01-01";
-            if (despesa.fl_pago == 1)
+
+            if (despesa.fl_pago == '1')
             {
-                DateTime dt = DateTime.Now;
-                dt_pagamento = dt.ToString("yyyy-MM-dd");
+                DateTime dat_pag = Convert.ToDateTime(despesa.dt_pagamento);
+                dt_pagamento = dat_pag.ToString("yyyy-MM-dd");
+
             }
 
             string vl_valor_parc = despesa.vl_valor_parc.ToString(CultureInfo.InvariantCulture);
@@ -77,6 +80,7 @@ namespace Gestor_API.Repository
                     if (y > 1)
                     {
                         dt_vencimento = despesa.dt_vencimento.AddMonths(i).ToString("yyyy-MM-dd");
+                        despesa.fl_pago = '0';
                     }
 
                     var query2 = @"insert into TB_DESPESA(  id_usuario ,   id_categoria ,   cd_qtd_parc ,   cd_qtd_tot_parc ,   vl_valor_parc ,   vl_valor_multa ,   vl_valor_desconto ,   cd_dia ,   cd_mes ,   cd_ano ,   fl_despesa_fixa ,   fl_pago ,   dt_vencimento ,   dt_pagamento ,dt_cadastro ,ds_descricao,id_parcela)
@@ -103,6 +107,7 @@ namespace Gestor_API.Repository
                     if (y > 1)
                     {
                         dt_vencimento = despesa.dt_vencimento.AddMonths(i).ToString("yyyy-MM-dd");
+                        despesa.fl_pago = '0';
                     }
 
                     var query2 = @"insert into TB_DESPESA(  id_usuario ,   id_categoria ,   cd_qtd_parc ,   cd_qtd_tot_parc ,   vl_valor_parc ,   vl_valor_multa ,   vl_valor_desconto ,   cd_dia ,   cd_mes ,   cd_ano ,   fl_despesa_fixa ,   fl_pago ,   dt_vencimento ,   dt_pagamento ,dt_cadastro ,ds_descricao, id_parcela)
@@ -156,11 +161,14 @@ namespace Gestor_API.Repository
             {
                 DateTime dat = Convert.ToDateTime(despesa.dt_vencimento);
                 var dt_vencimento = dat.ToString("yyyy-MM-dd");
+
                 var dt_pagamento = "2100-01-01";
-                if (despesa.fl_pago == 1)
+
+                if (despesa.fl_pago == '1')
                 {
-                    DateTime dt = DateTime.Now;
-                    dt_pagamento = dt.ToString("yyyy-MM-dd");
+                    DateTime dat_pag = Convert.ToDateTime(despesa.dt_pagamento);
+                    dt_pagamento = dat_pag.ToString("yyyy-MM-dd");
+
                 }
 
                 string vl_valor_parc = despesa.vl_valor_parc.ToString(CultureInfo.InvariantCulture);
@@ -171,16 +179,16 @@ namespace Gestor_API.Repository
 
                 var query = @"update TB_DESPESA set 
                             id_categoria = " + despesa.id_categoria +
-                                " ,vl_valor_parc = " + despesa.vl_valor_parc +
-                                " ,vl_valor_multa=" + despesa +
-                                " ,vl_valor_desconto=" + despesa.vl_valor_desconto +
-                                " ,cd_dia=" + despesa.cd_dia +
-                                " ,cd_mes=" + despesa.cd_mes +
-                                " ,cd_ano=" + despesa.cd_ano +
+                                " ,vl_valor_parc = " + vl_valor_parc +
+                                " ,vl_valor_multa=" + vl_valor_multa +
+                                " ,vl_valor_desconto=" + vl_valor_desconto +
+                                " ,cd_dia=" + dt_vencimento.Substring(8, 2) +
+                                " ,cd_mes=" + dt_vencimento.Substring(5, 2) +
+                                " ,cd_ano=" + dt_vencimento.Substring(0, 4) +
                                 " ,fl_pago=" + despesa.fl_pago +
-                                " ,dt_vencimento=" + despesa.dt_vencimento +
-                                " ,dt_pagamento=" + despesa.dt_pagamento +
-                                " ,ds_descricao=" + despesa.ds_descricao +
+                                " ,dt_vencimento='" + dt_vencimento +
+                                "' ,dt_pagamento='" + dt_pagamento +
+                                "' ,ds_descricao='" + despesa.ds_descricao +
 
                                 "' where id= " + despesa.id +
                                 " and id_usuario = " + despesa.id_usuario;
