@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Gestor_API.Context;
 using Gestor_API.Contracts;
+using Gestor_API.Entities;
 using Gestor_API.Entities.Contas;
 using System;
 using System.Collections.Generic;
@@ -36,8 +37,8 @@ namespace Gestor_API.Repository
                             ,cd_ano
                             ,fl_despesa_fixa
                             ,fl_pago
-,dt_vencimento
-,dt_pagamento
+                            ,dt_vencimento
+                            ,dt_pagamento
                             ,ds_descricao,
                             Id_parcela FROM TB_DESPESA where id_usuario =  " + despesa.id_usuario + " and id = " + despesa.id;
 
@@ -267,7 +268,11 @@ namespace Gestor_API.Repository
         public async Task<IEnumerable<Despesa>> GetDespesas(int id_usuario, int cd_mes, int cd_ano)
         {
             var query = @"select Id, id_categoria, cd_qtd_parc,cd_qtd_tot_parc, vl_valor_parc, vl_valor_desconto, vl_valor_multa, cd_dia, cd_mes, cd_ano, fl_despesa_fixa,fl_pago,dt_vencimento,ds_descricao 
-                        from TB_DESPESA where id_usuario = " + id_usuario + " and cd_mes = " + cd_mes + " and cd_ano = " + cd_ano;
+                        from TB_DESPESA where id_usuario = "+ @id_usuario + " and cd_mes = "+@cd_mes+" and cd_ano = "+ @cd_ano + 
+                        " union " +
+                        " select Id, id_categoria, cd_qtd_parc,cd_qtd_tot_parc, vl_valor_parc, vl_valor_desconto, vl_valor_multa, cd_dia, cd_mes, cd_ano, fl_despesa_fixa,fl_pago,dt_vencimento,ds_descricao " +
+                        " from TB_DESPESA where id_usuario = "+ @id_usuario + " and cd_mes < "+@cd_mes+" and cd_ano <= "+ @cd_ano + " and fl_pago = 0 " +
+                        " order by dt_vencimento desc";
             using (var connection = _context.CreateConnection())
             {
                 var despesa = await connection.QueryAsync<Despesa>(query);
@@ -275,9 +280,20 @@ namespace Gestor_API.Repository
             }
         }
 
+        public async Task<IEnumerable<DespesaChart>> GetDespesasChart(int id_usuario, int cd_mes, int cd_ano)
+        {
+            var query = @"select id, ds_descricao, 
+(select sum(vl_valor_parc) from TB_DESPESA where id_usuario = " + @id_usuario + " and cd_mes = " + @cd_mes + " and cd_ano = " + @cd_ano + " and id_categoria = TB_CATEGORIA.id) as GastoMes, " +
+"((select sum(vl_valor_parc) from TB_DESPESA where id_usuario = "+ @id_usuario + "and cd_mes = "+@cd_mes+" and cd_ano = "+ @cd_ano + " and id_categoria = TB_CATEGORIA.id) " +
+"/ (select sum(vl_valor_parc) from TB_DESPESA where id_usuario = " + @id_usuario + "and cd_mes = " + @cd_mes + " and cd_ano = " + @cd_ano + " )  *100) as Perc " +
+                          "from TB_CATEGORIA order by 3 desc";
 
 
-
-
+            using (var connection = _context.CreateConnection())
+            {
+                var despesa = await connection.QueryAsync<DespesaChart>(query);
+                return despesa.ToList();
+            }
+        }
     }
 }

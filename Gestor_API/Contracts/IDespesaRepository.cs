@@ -1,4 +1,5 @@
-﻿using Gestor_API.Entities.Contas;
+﻿using Gestor_API.Entities;
+using Gestor_API.Entities.Contas;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -17,5 +18,6 @@ namespace Gestor_API.Contracts
 
 		public Task<IEnumerable<Despesa>> GetDespesas(int id_usuario, int cd_mes, int cd_ano);
 
+		public Task<IEnumerable<DespesaChart>> GetDespesasChart(int id_usuario, int cd_mes, int cd_ano);
 	}
 }
