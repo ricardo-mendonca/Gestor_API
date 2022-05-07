@@ -100,7 +100,19 @@ namespace Gestor_API.Controllers
         }
 
 
+        [HttpPost("GetDespesasChart")]
+        [Authorize]
+        public async Task<IActionResult> GetDespesasChart([FromBody] Despesa despesa)
+        {
+            var user = User.Identity.Name;
+            string[] usuario = user.Split(';');
+            int Id_usuario = Convert.ToInt32(usuario[1].ToString());
 
+            var desp = await _despesaRepo.GetDespesasChart(Id_usuario, despesa.cd_mes, despesa.cd_ano);
+            if (desp == null) return BadRequest(new { message = "Nehuma despesa localizada." });
+
+            return Ok(desp);
+        }
 
 
 
