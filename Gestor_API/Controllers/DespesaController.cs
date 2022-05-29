@@ -103,7 +103,7 @@ namespace Gestor_API.Controllers
         [HttpPost("GetDespesasChart")]
         [Authorize]
         public async Task<IActionResult> GetDespesasChart([FromBody] Despesa despesa)
-        {
+            {
             var user = User.Identity.Name;
             string[] usuario = user.Split(';');
             int Id_usuario = Convert.ToInt32(usuario[1].ToString());
