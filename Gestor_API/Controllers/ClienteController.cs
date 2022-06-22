@@ -20,7 +20,7 @@ namespace Gestor_API.Controllers
 
         [HttpPost("CreateCliente")]
         [Authorize]
-        public async Task<IActionResult> CreateCliente( Cliente cliente)
+        public async Task<IActionResult> CreateCliente(Cliente cliente)
         {
             var user = User.Identity.Name;
             string[] v = user.Split(';');
@@ -39,5 +39,22 @@ namespace Gestor_API.Controllers
         }
 
 
+        //AlterCliente
+        [HttpPost("AlterCliente")]
+        [Authorize]
+        public async Task<IActionResult> AlterCliente(Cliente cliente)
+        {
+
+            return Ok("");
+        }
+
+
+        //CancelCliente
+        [HttpPost("CancelCliente")]
+        [Authorize]
+        public async Task<IActionResult> CancelCliente(Cliente cliente)
+        {
+            return Ok("");
+        }
     }
 }
