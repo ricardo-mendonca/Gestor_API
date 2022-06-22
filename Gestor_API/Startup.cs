@@ -31,6 +31,8 @@ namespace Gestor_API
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped< ICategoriaRepository, CategoriaRepository> ();
             services.AddScoped<IDespesaRepository, DespesaRepository>();
+            services.AddScoped<IClienteRepository, ClienteRepository>();
+
             services.AddControllers();
 
             services.AddControllersWithViews();
