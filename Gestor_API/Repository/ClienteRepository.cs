@@ -10,7 +10,7 @@ namespace Gestor_API.Repository
     public class ClienteRepository : IClienteRepository
     {
         private readonly DapperContext _context;
-
+        
         public ClienteRepository(DapperContext context)
         {
             _context = context;
@@ -19,14 +19,17 @@ namespace Gestor_API.Repository
         public async Task<Cliente> AlterCliente(Cliente cliente)
         {
             try
-            {
+            { 
+                string dt_nascimento = ConverterData(cliente.dt_nascimento);
+                string dt_conjugue_nascimento = ConverterData(cliente.dt_conjugue_nascimento);
+
                 var query = @"update TB_CLIENTE set " +
                     ", ds_nome = " + cliente.ds_nome +
                     ", ds_rg_ie = " + cliente.ds_rg_ie +
                     ", ds_email = " + cliente.ds_email +
                     ", ds_telefone = " + cliente.ds_telefone +
                     ", ds_celular = " + cliente.ds_celular +
-                    ", dt_nascimento = " + cliente.dt_nascimento +
+                    ", dt_nascimento = " + dt_nascimento +
                     ", ds_cep = " + cliente.ds_cep +
                     ", ds_endereco = " + cliente.ds_endereco +
                     ", ds_numero = " + cliente.ds_numero +
@@ -39,7 +42,7 @@ namespace Gestor_API.Repository
                     ", ds_conjugue_email = " + cliente.ds_conjugue_email +
                     ", ds_conjugue_telefone = " + cliente.ds_conjugue_telefone +
                     ", ds_conjugue_celular = " + cliente.ds_conjugue_celular +
-                    ", dt_conjugue_nascimento = " + cliente.dt_conjugue_nascimento +
+                    ", dt_conjugue_nascimento = " + dt_conjugue_nascimento +
                     ", fl_Ativo = " + cliente.fl_Ativo +
                     ", ds_observacao = " + cliente.ds_observacao +
                     ", id_estado_civil = " + cliente.id_estado_civil +
@@ -72,17 +75,11 @@ namespace Gestor_API.Repository
 
         public async Task<Cliente> CreateCliente(Cliente cliente)
         {
+            string dt_nascimento = ConverterData(cliente.dt_nascimento);
+            string dt_conjugue_nascimento = ConverterData(cliente.dt_conjugue_nascimento);
+                      
 
-            DateTime dat = Convert.ToDateTime(cliente.dt_nascimento);
-            var dt_nascimento = dat.ToString("yyyy-MM-dd");
-
-            DateTime dat2 = Convert.ToDateTime(cliente.dt_conjugue_nascimento);
-            var dt_conjugue_nascimento = dat2.ToString("yyyy-MM-dd");
-
-            if (dt_conjugue_nascimento == "0001-01-01")
-            {
-                dt_conjugue_nascimento = null;
-            }
+            
 
             var query = @"INSERT INTO TB_CLIENTE (id_usuario,ds_nome,ds_cpf_cnpj,ds_rg_ie,fl_pj_pf,ds_email,ds_telefone,ds_celular,dt_nascimento,ds_cep,ds_endereco,ds_numero,ds_complemento,ds_bairro,ds_municipio,ds_estado,ds_conjugue_nome,ds_conjugue_cpf,ds_conjugue_rg,ds_conjugue_email,
                         ds_conjugue_telefone,ds_conjugue_celular,dt_conjugue_nascimento,fl_Ativo,ds_observacao,id_estado_civil) 
@@ -130,8 +127,21 @@ namespace Gestor_API.Repository
 
         }
 
+        #region VALIDAÇÕES
+        private static string ConverterData(DateTime dt)
+        {
+            DateTime dat = Convert.ToDateTime(dt);
+            var dt_data = dat.ToString("yyyy-MM-dd");
+            if (dt_data == "0001-01-01")
+            {
+                dt_data = null;
+            }
+            return dt_data;
+        }
 
 
+
+        #endregion
 
     }
 }
