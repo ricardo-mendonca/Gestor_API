@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\dev\\Gestor_API\\Gestor_API.csproj": {}
+    "C:\\dev\\Gestor_API\\Gestor_API\\Gestor_API.csproj": {}
   },
   "projects": {
-    "C:\\dev\\Gestor_API\\Gestor_API.csproj": {
+    "C:\\dev\\Gestor_API\\Gestor_API\\Gestor_API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\dev\\Gestor_API\\Gestor_API.csproj",
+        "projectUniqueName": "C:\\dev\\Gestor_API\\Gestor_API\\Gestor_API.csproj",
         "projectName": "Gestor_API",
-        "projectPath": "C:\\dev\\Gestor_API\\Gestor_API.csproj",
+        "projectPath": "C:\\dev\\Gestor_API\\Gestor_API\\Gestor_API.csproj",
         "packagesPath": "C:\\Users\\ricar\\.nuget\\packages\\",
-        "outputPath": "C:\\dev\\Gestor_API\\obj\\",
+        "outputPath": "C:\\dev\\Gestor_API\\Gestor_API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ricar\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -67,12 +67,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[5.0.13, 5.0.13]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -81,7 +75,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
         }
       }
     }
