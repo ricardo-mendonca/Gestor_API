@@ -12,11 +12,11 @@ namespace Gestor_API.Contracts
 
 		public Task<IEnumerable<Categoria>> GetCategoriaNome(string nome);
 
-		//public Task<Usuario> CreateUsuario(Usuario usuario);
+		public Task<Categoria> CreateCategoria(Categoria categoria);
 
-		//public Task UpdateCompany(int id, UsuarioForUpdateDto company);
-		//public Task DeleteCompany(int id);
-		//public Task<Usuario> GetCompanyByEmployeeId(int id);
-		//public Task<Usuario> GetCompanyEmployeesMultipleResults(int id);
+		public Task<Categoria> UpdateCategoria(Categoria categoria);
+
+		public Task<Categoria> DeletarCategoria(Categoria categoria);
+
 	}
 }
