@@ -162,15 +162,19 @@ namespace Gestor_API.Controllers
 
         [HttpGet("GetDespesaMes")]
         [Authorize]
-        public async Task<IActionResult> GetDespesasMes(int id_usuario, int cd_mes, int cd_ano)
+        public async Task<IActionResult> GetDespesasMes(int cd_mes, int cd_ano)
         {
+            var user = User.Identity.Name;
+            string[] usuario = user.Split(';');
+            int Id_usuario = Convert.ToInt32(usuario[1].ToString());
+
             var ret = "";
-            if (id_usuario == 0) ret += "usuario inválido";
+            if (Id_usuario == 0) ret += "usuario inválido";
             if (cd_mes == 0) ret += "Digite um mês valido";
             if (cd_ano == 0) ret += "Digite um ano valido";
             if (!String.IsNullOrWhiteSpace(ret)) return BadRequest(new { message = ret });
 
-            var desp = await _despesaRepo.GetDespesasMes(id_usuario, cd_mes, cd_ano);
+            var desp = await _despesaRepo.GetDespesasMes(Id_usuario, cd_mes, cd_ano);
             if (desp == null) return BadRequest(new { message = "Nehum usuário localizado." });
 
             return Ok(desp);
